@@ -1,4 +1,23 @@
-.App {
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: 'lexend';
+  src: url('./fonts/Lexend-VariableFont_wght.ttf') format('ttf');
+}
+
+@font-face {
+  font-family: 'merriweather';
+  src: url('./fonts/Merriweather-Regular.ttf') format('ttf');
+}
+
+@font-face {
+  font-family: 'notosans';
+  src: url('./fonts/NotoSans-VariableFont_wdth\,wght.ttf') format('ttf');
+}
+
+/* .App {
   text-align: center;
 }
 
@@ -35,4 +54,4 @@
   to {
     transform: rotate(360deg);
   }
-}
+} */
