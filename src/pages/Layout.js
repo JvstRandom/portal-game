@@ -1,23 +1,36 @@
-import React from 'react'
-import { Outlet, Link } from "react-router-dom";
+import React from 'react';
+import { Outlet, Link, useNavigate } from 'react-router-dom';
+import { supabase } from '../utils';
 
-function Layout() {
+function Layout({ session }) {
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    navigate('/'); 
+  };
+
   return (
     <>
-        <nav>
-            <div className='flex flex-row justify-between px-3 mt-3 items-center'>
-                <Link to="/" className='font-penjelasan text-2xl'>
-                    Sistem Informasi Game
-                </Link>
-                <Link to="/Login" className="btn btn-outline btn-warning">
-                    Login
-                </Link>
-            </div>
-        </nav>
-
-        <Outlet />
+      <nav>
+        <div className='flex flex-row justify-between px-3 mt-3 items-center'>
+          <Link to="/" className='font-penjelasan text-2xl hover:text-warning'>
+            Sistem Informasi Game
+          </Link>
+          {session ? (
+            <button className="btn btn-outline btn-danger" onClick={handleLogout}>
+              Logout
+            </button>
+          ) : (
+            <Link to="/login" className="btn btn-outline btn-warning">
+              Login
+            </Link>
+          )}
+        </div>
+      </nav>
+      <Outlet />
     </>
-  )
+  );
 }
 
-export default Layout
+export default Layout;

@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 
 function AdminDashboard() {
   return (
@@ -9,7 +10,7 @@ function AdminDashboard() {
           <h1 className='text-6xl font-judul hover:font-mono'>
             Selamat datang !
           </h1>
-          <button className="btn btn-accent mt-10 w-full max-w-4xl">Tambah Game</button>
+          <Link to="/AddGame" className="btn btn-accent mt-10 w-full max-w-4xl">Tambah Game</Link>
         </div>
 
         {/* KONTEN */}
@@ -24,10 +25,10 @@ function AdminDashboard() {
                         src="https://img.daisyui.com/images/stock/photo-1635805737707-575885ab0820.jpg"
                         alt="Movie" />
                     <div className="card-body">
-                      <h2 className="card-title">New movie is released!</h2>
-                      <p>Click the button to watch on Jetflix app.</p>
+                      <h2 className="card-title font-judul text-2xl">New movie is released!</h2>
+                      <p className='font-penjelasan'>Click the button to watch on Jetflix app.</p>
                       <div className="card-actions justify-end">
-                        <button className="btn btn-secondary">Watch</button>
+                        <button className="btn btn-outline btn-warning">Edit</button>
                       </div>
                     </div>
                   </div>

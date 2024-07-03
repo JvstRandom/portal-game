@@ -26,10 +26,10 @@ function Home() {
                         src="https://img.daisyui.com/images/stock/photo-1635805737707-575885ab0820.jpg"
                         alt="Movie" />
                     <div className="card-body">
-                      <h2 className="card-title">New movie is released!</h2>
-                      <p>Click the button to watch on Jetflix app.</p>
+                      <h2 className="card-title font-judul text-2xl">New movie is released!</h2>
+                      <p className='font-penjelasan'>Click the button to watch on Jetflix app.</p>
                       <div className="card-actions justify-end">
-                        <button className="btn btn-secondary">Watch</button>
+                        <button className="btn btn-secondary hover:text-white">Watch</button>
                       </div>
                     </div>
                   </div>
@@ -40,10 +40,10 @@ function Home() {
                         src="https://img.daisyui.com/images/stock/photo-1635805737707-575885ab0820.jpg"
                         alt="Movie" />
                     <div className="card-body">
-                      <h2 className="card-title">New movie is released!</h2>
-                      <p>Click the button to watch on Jetflix app.</p>
+                      <h2 className="card-title font-judul text-2xl">New movie is released!</h2>
+                      <p className='font-penjelasan'>Click the button to watch on Jetflix app.</p>
                       <div className="card-actions justify-end">
-                        <button className="btn btn-secondary">Watch</button>
+                        <button className="btn btn-secondary hover:text-white">Watch</button>
                       </div>
                     </div>
                   </div>
