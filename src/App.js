@@ -6,6 +6,7 @@ import Login from './pages/Login';
 import Layout from './pages/Layout';
 import AddGame from './pages/AddGame';
 import AdminDashboard from './pages/AdminDashboard';
+import AddAdmin from './pages/AddAdmin';
 import { supabase } from './utils';
 import ProtectedRoute from './components/ProtectedRoutes';
 
@@ -14,7 +15,7 @@ export default function App() {
   const [session, setSession] = useState(null);
 
   useEffect(() => {
-    const session = supabase.auth.session();
+    const session = supabase.auth.getSession();
     setSession(session);
 
     const { data: authListener } = supabase.auth.onAuthStateChange((_event, session) => {
@@ -22,7 +23,7 @@ export default function App() {
     });
 
     return () => {
-      authListener.unsubscribe();
+      authListener.subscription.unsubscribe();
     };
   }, []);
 
@@ -47,6 +48,14 @@ export default function App() {
               element={
                 <ProtectedRoute session={session}>
                   <AddGame />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="addadmin"
+              element={
+                <ProtectedRoute session={session}>
+                  <AddAdmin />
                 </ProtectedRoute>
               }
             />

@@ -10,13 +10,25 @@ function Login() {
 
   const handleLogin = async () => {
     try {
-      const { user, error } = await supabase.auth.signIn({
+      const { user, error } = await supabase.auth.signInWithPassword({
         email,
         password,
       });
 
       if (error) {
         setError(error.message);
+        return;
+      }
+
+      // Check if the logged-in user is an admin
+      const { data: adminData } = await supabase
+        .from('admins')
+        .select('*')
+        .eq('email', email);
+
+      if (!adminData) {
+        setError('Access restricted to admins only.');
+        await supabase.auth.signOut(); // Sign out the non-admin user
         return;
       }
 

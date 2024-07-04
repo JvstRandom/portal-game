@@ -11,6 +11,7 @@ function AdminDashboard() {
             Selamat datang !
           </h1>
           <Link to="/AddGame" className="btn btn-accent mt-10 w-full max-w-4xl">Tambah Game</Link>
+          {/* <Link to="/AddAdmin" className="btn btn-info mt-10 w-full max-w-4xl">Tambah Admin</Link> */}
         </div>
 
         {/* KONTEN */}

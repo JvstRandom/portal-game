@@ -18,7 +18,7 @@ function Layout({ session }) {
             Sistem Informasi Game
           </Link>
           {session ? (
-            <button className="btn btn-outline btn-danger" onClick={handleLogout}>
+            <button className="btn btn-outline btn-error" onClick={handleLogout}>
               Logout
             </button>
           ) : (

@@ -8,14 +8,13 @@ const ProtectedRoute = ({ children }) => {
 
   useEffect(() => {
     const checkAdmin = async () => {
-      const user = supabase.auth.user();
+      const user = supabase.auth.getSession();
 
       if (user) {
         const { data: adminData, error } = await supabase
           .from('admins')
           .select('*')
-          .eq('id', user.id)
-          .single();
+          .eq('email', user.email);
 
         if (adminData) {
           setIsAdmin(true);
@@ -26,7 +25,7 @@ const ProtectedRoute = ({ children }) => {
     checkAdmin();
   }, []);
 
-  return isAdmin ? children : <Navigate to="/login" />;
+  return isAdmin ? children : <Navigate to="/Dashboard" />;
 };
 
 export default ProtectedRoute;
