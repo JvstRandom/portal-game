@@ -1,109 +1,94 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
+import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import { supabase } from '../utils';
 
 function AdminDashboard() {
+  const [games, setGames] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
+  const ITEMS_PER_PAGE = 4;
+
+  useEffect(() => {
+    async function fetchGames() {
+      // Fetch the total number of games
+      const { count } = await supabase
+        .from('Game')
+        .select('id', { count: 'exact' });
+      setTotalPages(Math.ceil(count / ITEMS_PER_PAGE));
+
+      // Fetch paginated games
+      const { data, error } = await supabase
+        .from('Game')
+        .select('*')
+        .order('id', { ascending: true })
+        .range((currentPage - 1) * ITEMS_PER_PAGE, currentPage * ITEMS_PER_PAGE - 1);
+
+      if (error) {
+        console.log('Error fetching games:', error.message);
+      } else {
+        setGames(data);
+      }
+    }
+
+    fetchGames();
+  }, [currentPage]);
+
+  const handlePreviousPage = () => {
+    if (currentPage > 1) setCurrentPage(currentPage - 1);
+  };
+
+  const handleNextPage = () => {
+    if (currentPage < totalPages) setCurrentPage(currentPage + 1);
+  };
+
+  const handleDelete = async (id) => {
+    const { error } = await supabase
+      .from('Game')
+      .delete()
+      .eq('id', id);
+
+    if (error) {
+      console.log('Error deleting game:', error.message);
+    } else {
+      setGames(games.filter((game) => game.id !== id));
+    }
+  };
+
   return (
     <div>
-        <div className='container mx-auto px-4 mt-10'>
+      <div className='container mx-auto px-4 mt-10'>
         {/* JUDUL */}
         <div className='flex flex-col justify-center items-center'>
-          <h1 className='text-6xl font-judul hover:font-mono'>
-            Selamat datang !
-          </h1>
+          <h1 className='text-6xl font-judul hover:font-mono'>Selamat datang!</h1>
           <Link to="/AddGame" className="btn btn-accent mt-10 w-full max-w-4xl">Tambah Game</Link>
-          {/* <Link to="/AddAdmin" className="btn btn-info mt-10 w-full max-w-4xl">Tambah Admin</Link> */}
         </div>
 
         {/* KONTEN */}
-        <div>
-          <div className="carousel w-full h-full mt-8">
-            <div id="item1" className="carousel-item w-full flex items-center justify-center">
-
-              <div className='grid grid-cols-1 sm:grid-cols-2 gap-14 p-6'>
-                  <div className="card card-side border-2 border-primary rounded-2xl shadow-xl">
-                    <img
-                        className='rounded-l-xl '
-                        src="https://img.daisyui.com/images/stock/photo-1635805737707-575885ab0820.jpg"
-                        alt="Movie" />
-                    <div className="card-body">
-                      <h2 className="card-title font-judul text-2xl">New movie is released!</h2>
-                      <p className='font-penjelasan'>Click the button to watch on Jetflix app.</p>
-                      <div className="card-actions justify-end">
-                        <button className="btn btn-outline btn-warning">Edit</button>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="card card-side border-2 border-primary rounded-2xl shadow-xl">
-                    <img
-                        className='rounded-l-xl'
-                        src="https://img.daisyui.com/images/stock/photo-1635805737707-575885ab0820.jpg"
-                        alt="Movie" />
-                    <div className="card-body">
-                      <h2 className="card-title">New movie is released!</h2>
-                      <p>Click the button to watch on Jetflix app.</p>
-                      <div className="card-actions justify-end">
-                        <button className="btn btn-secondary">Watch</button>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="card card-side border-2 border-primary rounded-2xl shadow-xl">
-                    <img
-                        className='rounded-l-xl'
-                        src="https://img.daisyui.com/images/stock/photo-1635805737707-575885ab0820.jpg"
-                        alt="Movie" />
-                    <div className="card-body">
-                      <h2 className="card-title">New movie is released!</h2>
-                      <p>Click the button to watch on Jetflix app.</p>
-                      <div className="card-actions justify-end">
-                        <button className="btn btn-secondary">Watch</button>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="card card-side border-2 border-primary rounded-2xl shadow-xl">
-                    <img
-                        className='rounded-l-xl'
-                        src="https://img.daisyui.com/images/stock/photo-1635805737707-575885ab0820.jpg"
-                        alt="Movie" />
-                    <div className="card-body">
-                      <h2 className="card-title">New movie is released!</h2>
-                      <p>Click the button to watch on Jetflix app.</p>
-                      <div className="card-actions justify-end">
-                        <button className="btn btn-secondary">Watch</button>
-                      </div>
-                    </div>
-                  </div>
+        <div className='grid grid-cols-1 sm:grid-cols-2 gap-14 p-6'>
+          {games.map((game) => (
+            <div key={game.id} className='card card-side border-2 border-primary rounded-2xl shadow-xl'>
+              <img className='rounded-l-xl h-72 w-56 object-cover' src={game.gambar} alt={game.namagame} />
+              <div className='card-body'>
+                <h2 className='card-title font-judul text-2xl'>{game.namagame}</h2>
+                <p className='font-penjelasan'>{game.description}</p>
+                <div className='card-actions justify-end flex flex-row'>
+                  <Link to={`/EditGame/${game.id}`} className='btn btn-outline btn-warning'>Edit</Link>
+                  <button onClick={() => handleDelete(game.id)} className='btn btn-outline btn-error'>Delete</button>
                 </div>
+              </div>
+            </div>
+          ))}
+        </div>
 
-            </div>
-            <div id="item2" className="carousel-item w-full">
-              <img
-                src="https://img.daisyui.com/images/stock/photo-1609621838510-5ad474b7d25d.jpg"
-                className="w-full" />
-            </div>
-            <div id="item3" className="carousel-item w-full">
-              <img
-                src="https://img.daisyui.com/images/stock/photo-1414694762283-acccc27bca85.jpg"
-                className="w-full" />
-            </div>
-            <div id="item4" className="carousel-item w-full">
-              <img
-                src="https://img.daisyui.com/images/stock/photo-1665553365602-b2fb8e5d1707.jpg"
-                className="w-full" />
-            </div>
-          </div>
-          <div className="join flex w-full justify-center gap-2 py-2 mt-4">
-            <input className="join-item btn btn-square" type="radio" name="options" aria-label="1" onClick={() => document.getElementById('item1').scrollIntoView({ behavior: 'smooth' })} defaultChecked />
-            <input className="join-item btn btn-square" type="radio" name="options" aria-label="2" onClick={() => document.getElementById('item2').scrollIntoView({ behavior: 'smooth' })} />
-            <input className="join-item btn btn-square" type="radio" name="options" aria-label="3" onClick={() => document.getElementById('item3').scrollIntoView({ behavior: 'smooth' })} />
-            <input className="join-item btn btn-square" type="radio" name="options" aria-label="4" onClick={() => document.getElementById('item4').scrollIntoView({ behavior: 'smooth' })} />
-          </div>
+        {/* Pagination Controls */}
+        <div className='flex justify-center mt-10'>
+          <button onClick={handlePreviousPage} className='btn btn-outline btn-accent' disabled={currentPage === 1}>Previous</button>
+          <span className='mx-4'>Page {currentPage} of {totalPages}</span>
+          <button onClick={handleNextPage} className='btn btn-outline btn-accent' disabled={currentPage === totalPages}>Next</button>
         </div>
       </div>
     </div>
-  )
+  );
 }
 
-export default AdminDashboard
+export default AdminDashboard;

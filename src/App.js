@@ -7,6 +7,7 @@ import Layout from './pages/Layout';
 import AddGame from './pages/AddGame';
 import AdminDashboard from './pages/AdminDashboard';
 import AddAdmin from './pages/AddAdmin';
+import EditGame from './pages/EditGame';
 import { supabase } from './utils';
 import ProtectedRoute from './components/ProtectedRoutes';
 
@@ -56,6 +57,14 @@ export default function App() {
               element={
                 <ProtectedRoute session={session}>
                   <AddAdmin />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="editgame/:id"
+              element={
+                <ProtectedRoute session={session}>
+                  <EditGame />
                 </ProtectedRoute>
               }
             />
